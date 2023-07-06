@@ -16,4 +16,5 @@ public class EntryVote: BaseEntity
 
 
     public virtual Entry Entry { get; set; }
+
 }

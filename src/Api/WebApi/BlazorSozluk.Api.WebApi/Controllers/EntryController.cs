@@ -1,4 +1,5 @@
 ﻿using BlazorSozluk.Api.Application.Features.Queries.GetEntries;
+using BlazorSozluk.Api.Application.Features.Queries.GetMainPageEntries;
 using BlazorSozluk.Common.Models.Queries;
 using BlazorSozluk.Common.Models.RequestModels;
 using MediatR;
@@ -26,6 +27,15 @@ public class EntryController : BaseController
 
         return Ok(entries);
     }
+
+    [HttpGet]
+    [Route("GetMainPageEntries")]
+    public async Task<IActionResult> GetEntriesPaged(int page, int pageSize)
+    {
+        var entries = await mediator.Send(new GetMainPageEntriesQuery(new Guid(),page, pageSize));
+        return Ok(entries);
+    }
+
 
 
     [HttpPost]
@@ -55,12 +65,4 @@ public class EntryController : BaseController
     }
 
 
-    [HttpGet]
-    [Route("Search")]
-    public async Task<IActionResult> Search([FromQuery] SearchEntryQuery query)
-    {
-        var result = await mediator.Send(query);
-
-        return Ok(result);
-    }
 }
