@@ -16,9 +16,7 @@ namespace BlazorSozluk.Common.Infrastructure.Entensions
         {
             var count = await query.CountAsync();
             Page page = new(currentPage, pageSize, count);
-
             var data = await query.Skip(page.Skip).Take(pageSize).AsNoTracking().ToListAsync();
-
             var result =  new PagedViewModel<T>(data,page);
 
             return result;

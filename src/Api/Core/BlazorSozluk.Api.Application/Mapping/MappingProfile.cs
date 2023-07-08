@@ -33,6 +33,8 @@ public class MappingProfile : Profile
         CreateMap<CreateEntryCommentCommand, EntryComment>()
             .ReverseMap();
 
+
+
         
     }
 }

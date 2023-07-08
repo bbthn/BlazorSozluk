@@ -23,4 +23,8 @@
 		<ProjectReference Include="..\BlazorSozluk.Api.Domain\BlazorSozluk.Api.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\Queries\SearchBySubject\" />
+	</ItemGroup>
+
 </Project>
