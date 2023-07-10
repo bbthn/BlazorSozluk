@@ -21,7 +21,7 @@ public class SearchTextQueryHandler : IRequestHandler<SearchEntryQuery, List<Sea
 
     public async Task<List<SearchEntryViewModel>> Handle(SearchEntryQuery request, CancellationToken cancellationToken)
     {
-        //todo validation
+        //TODO validation
         var result = entryRepository
             .Get(i => EF.Functions.Like(i.Subject, $"{request.SearchText}%"))
             .Select(i => new SearchEntryViewModel()
@@ -29,6 +29,7 @@ public class SearchTextQueryHandler : IRequestHandler<SearchEntryQuery, List<Sea
                 Id = i.Id,
                 Subject = i.Subject
             });
+
 
         return await result.ToListAsync(cancellationToken);
     }

@@ -1,5 +1,6 @@
 using BlazorSozluk.Api.Application.Extensions;
 using BlazorSozluk.Api.Infrastructure.Persistence.Extensions;
+using BlazorSozluk.Api.WebApi.Infrastructure.Extensions;
 using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,16 +21,12 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AuthRegister(builder.Configuration);
+
 builder.Services.AddApplicationRegistration();
 builder.Services.AddInfrastructureRegistration(builder.Configuration);
 
-// Add Cors
-builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-{
-    builder.AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
-}));
+
 
 var app = builder.Build();
 
@@ -42,11 +39,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("MyPolicy");
 
 app.MapControllers();
 
