@@ -12,22 +12,24 @@ namespace BlazorSozluk.Api.WebApi.Infrastructure.Extensions
             ,bool useDefaultHandlingResponse = true
             ,Func<HttpContext, Exception, Task> handleException = null)
         {
-
-            app.Run(context =>
+            app.UseExceptionHandler(options =>
             {
-                var exceptionObject = context.Features.Get<IExceptionHandlerFeature>();
+                options.Run(context =>
+                {
+                    var exceptionObject = context.Features.Get<IExceptionHandlerFeature>();
 
-                if (!useDefaultHandlingResponse && handleException is null)
-                    throw new ArgumentNullException(nameof(handleException),
-                        $"{handleException} cannot be null when {useDefaultHandlingResponse} is false");
+                    if (!useDefaultHandlingResponse && handleException is null)
+                        throw new ArgumentNullException(nameof(handleException),
+                            $"{handleException} cannot be null when {useDefaultHandlingResponse} is false");
 
-                if (!useDefaultHandlingResponse && handleException is not null)
-                    return handleException(context, exceptionObject.Error);
+                    if (!useDefaultHandlingResponse && handleException is not null)
+                        return handleException(context, exceptionObject.Error);
 
-                return DefaultHandleException(context, exceptionObject.Error,includeExceptionDetails);
+                    return DefaultHandleException(context, exceptionObject.Error, includeExceptionDetails);
+
+                });
 
             });
-
 
             return app;
         }
@@ -44,6 +46,7 @@ namespace BlazorSozluk.Api.WebApi.Infrastructure.Extensions
             }
             if(exception is DatabaseValidationException)
             {
+                statuscode = HttpStatusCode.BadRequest;
                 var validationResponse = new ValidationResponseModel(exception.Message);
                 await WriteResponse(context, statuscode, validationResponse);
                 return;

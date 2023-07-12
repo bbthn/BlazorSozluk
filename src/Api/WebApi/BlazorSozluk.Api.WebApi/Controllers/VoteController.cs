@@ -51,10 +51,5 @@ namespace BlazorSozluk.Api.WebApi.Controllers
         }
 
 
-
-
-
-
-
     }
 }

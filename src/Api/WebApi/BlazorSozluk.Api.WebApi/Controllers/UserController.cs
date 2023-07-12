@@ -38,6 +38,7 @@ public class UserController : BaseController
     [Route("Login")]
     public async Task<IActionResult> Login([FromBody]LoginUserCommand command)
     {
+
         var res = await mediator.Send(command);
 
         return Ok(res);
@@ -54,7 +55,6 @@ public class UserController : BaseController
 
     [HttpPost]
     [Route("Update")]
-    [Authorize]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
     {
         var guid = await mediator.Send(command);
@@ -73,7 +73,6 @@ public class UserController : BaseController
 
     [HttpPost]
     [Route("ChangePassword")]
-    [Authorize]
     public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordCommand command)
     {
         if (!command.UserId.HasValue)
