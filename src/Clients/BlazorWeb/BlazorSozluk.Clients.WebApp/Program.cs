@@ -26,7 +26,7 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddTransient<IVoteService,VoteService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IFavoriteService, FavoriteService>();
-builder.Services.AddTransient<IEntryServicie, EntryServicie>();
+builder.Services.AddTransient<IEntryService, EntryService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddBlazoredLocalStorage();

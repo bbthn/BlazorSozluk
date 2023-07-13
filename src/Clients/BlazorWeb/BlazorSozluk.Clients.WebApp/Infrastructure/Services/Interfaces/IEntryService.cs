@@ -4,7 +4,7 @@ using BlazorSozluk.Common.Models.RequestModels;
 
 namespace BlazorSozluk.Clients.WebApp.Infrastructure.Services.Interfaces
 {
-    public interface IEntryServicie
+    public interface IEntryService
     {
         Task<Guid> CreateEntry(CreateEntryCommand command);
         Task<Guid> CreateEntryComment(CreateEntryCommentCommand command);

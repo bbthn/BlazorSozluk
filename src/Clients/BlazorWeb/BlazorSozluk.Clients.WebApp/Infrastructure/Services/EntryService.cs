@@ -6,11 +6,11 @@ using System.Net.Http.Json;
 
 namespace BlazorSozluk.Clients.WebApp.Infrastructure.Services;
 
-public class EntryServicie : IEntryServicie
+public class EntryService : IEntryService
 {
     private readonly HttpClient httpClient;
 
-    public EntryServicie(HttpClient httpClient)
+    public EntryService(HttpClient httpClient)
     {
         this.httpClient = httpClient;
     }
