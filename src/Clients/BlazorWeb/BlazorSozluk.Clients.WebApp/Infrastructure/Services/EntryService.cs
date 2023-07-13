@@ -74,7 +74,7 @@ public class EntryService : IEntryService
 
     public async Task<List<SearchEntryViewModel>> SearchBySubject(string searchText)
     {
-        var result = await httpClient.GetFromJsonAsync<List<SearchEntryViewModel>>($"api/entry/search?searchtext{searchText}");
+        var result = await httpClient.GetFromJsonAsync<List<SearchEntryViewModel>>($"api/entry/search?searchtext={searchText}");
         return result;
 
 
