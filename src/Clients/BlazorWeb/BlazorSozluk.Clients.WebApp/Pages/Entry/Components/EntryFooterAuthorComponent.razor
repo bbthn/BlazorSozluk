@@ -1,0 +1,20 @@
+﻿
+<div class="card text-end border-0">
+    <div class="entry-author">
+        <a href="/profile/@Username">@Username</a>
+    </div>
+    <div class="entry-date">
+        <a href="#">@CreatedDate.ToString("dd.MM.yyyy HH:mm:ss")</a>
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public string Username { get; set; }
+
+    [Parameter]
+    public DateTime CreatedDate { get; set; }
+
+}

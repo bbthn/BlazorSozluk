@@ -23,7 +23,6 @@ public class FavoriteController : BaseController
 
     [HttpPost]
     [Route("entry/{entryId}")]
-    [Authorize]
     public async Task<IActionResult> CreateEntryFav(Guid entryId)
     {
         var result = await mediator.Send(new CreateEntryFavCommand(entryId, UserId));
@@ -33,7 +32,6 @@ public class FavoriteController : BaseController
 
     [HttpPost]
     [Route("entrycomment/{entrycommentId}")]
-    [Authorize]
     public async Task<IActionResult> CreateEntryCommentFav(Guid entrycommentId)
     {
         var result = await mediator.Send(new CreateEntryCommentFavCommand(entrycommentId, UserId.Value));
