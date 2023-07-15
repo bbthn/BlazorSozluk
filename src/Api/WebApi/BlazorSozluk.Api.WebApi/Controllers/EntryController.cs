@@ -69,6 +69,7 @@ public class EntryController : BaseController
 
     [HttpPost]
     [Route("CreateEntry")]
+    [Authorize]
     public async Task<IActionResult> CreateEntry([FromBody] CreateEntryCommand command)
     {
         if (!command.CreatedById.HasValue)
@@ -81,6 +82,7 @@ public class EntryController : BaseController
 
     [HttpPost]
     [Route("CreateEntryComment")]
+    [Authorize]
     public async Task<IActionResult> CreateEntryComment([FromBody] CreateEntryCommentCommand command)
     {
         if (!command.CreatedById.HasValue)

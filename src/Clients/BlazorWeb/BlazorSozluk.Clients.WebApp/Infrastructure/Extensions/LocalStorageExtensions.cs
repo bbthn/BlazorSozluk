@@ -23,14 +23,14 @@ public static class LocalStorageExtensions
         return await localStorageService.GetItemAsync<string>(UserName);
     }
 
-    public static void SetUserName(this  ISyncLocalStorageService localStorageService, string userName)
+    public static void SetUserName(this  ISyncLocalStorageService localStorageService, string value)
     {
-        localStorageService.SetUserName(userName);
+        localStorageService.SetItem(UserName, value);
     }
 
-    public static async Task SetUserName(this ILocalStorageService storageService, string userName)
+    public static async Task SetUserName(this ILocalStorageService storageService, string value)
     {
-        await storageService.SetUserName(userName);
+        await storageService.SetItemAsync(UserName, value);
     }
     public static Guid GetUserId(this ISyncLocalStorageService localStorageService)
     {
