@@ -1,0 +1,48 @@
+﻿@page "/entry/{id:Guid}"
+
+@if(entry is not null)
+{
+    <EntryViewerComponent Entry="@entry" />
+    <br/>
+    if (entryComments is not null)
+    {
+        foreach (var comment in entryComments.Result)
+        {
+            <EntryCommentViewerComponent EntryComment="@comment" />
+
+        }
+    }
+    <br/>
+    //TODO Pagination component will be here
+
+    <br />
+    <br />
+    <AuthorizeView>
+        
+        <Authorized>
+            <CreateEntryCommentComponent EntryId="EntryId" EntrySubject="@entry.Subject" OnClicked="@OnCommentCreate"/>
+        </Authorized>
+    </AuthorizeView>
+}
+
+
+@code {
+
+
+
+    [Parameter]
+    public Guid EntryId { get; set; }
+
+    [Inject]
+    IEntryService entryService { get; set; }
+
+    private GetEntryDetailViewModel entry = new();
+    private PagedViewModel<GetEntryCommentsViewModel> entryComments = new();
+    private int currentPage;
+
+    public async Task OnCommentCreate(CreateEntryCommentCommand command)
+    {
+        await entryService.CreateEntryComment(command);
+    }
+
+}
