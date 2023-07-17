@@ -33,8 +33,8 @@
     public async Task CreateEntryComment()
     {
         command.EntryId = EntryId;
-
         await OnClicked.InvokeAsync(command);
+        command = new CreateEntryCommentCommand();
     }
 
 

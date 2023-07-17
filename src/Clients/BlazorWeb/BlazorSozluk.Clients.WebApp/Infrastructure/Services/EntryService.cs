@@ -23,7 +23,7 @@ public class EntryService : IEntryService
 
     public async Task<GetEntryDetailViewModel> GetEntryDetail(Guid id)
     {
-        var result = await httpClient.GetFromJsonAsync<GetEntryDetailViewModel>($"/api/entry?id={id}");
+        var result = await httpClient.GetFromJsonAsync<GetEntryDetailViewModel>($"/api/entry/{id}");
         return result;
     }
     public async Task<PagedViewModel<GetEntryDetailViewModel>> GetMainPageEntries(int page, int pageSize)
@@ -62,12 +62,12 @@ public class EntryService : IEntryService
 
     public async Task<Guid> CreateEntryComment(CreateEntryCommentCommand command)
     {
-        var result = await httpClient.PostAsJsonAsync("/api/entry/createentrycomment", command);
+        var res = await httpClient.PostAsJsonAsync("/api/Entry/CreateEntryComment", command);
 
-        if (!result.IsSuccessStatusCode)
+        if (!res.IsSuccessStatusCode)
             return Guid.Empty;
 
-        var guidStr = await result.Content.ReadAsStringAsync();
+        var guidStr = await res.Content.ReadAsStringAsync();
 
         return new Guid(guidStr.Trim('"'));
     }

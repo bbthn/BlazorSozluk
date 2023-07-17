@@ -1,4 +1,4 @@
-﻿@page "/entry/{id:Guid}"
+﻿@page "/entry/{id:guid}"
 
 @if(entry is not null)
 {
@@ -20,7 +20,7 @@
     <AuthorizeView>
         
         <Authorized>
-            <CreateEntryCommentComponent EntryId="EntryId" EntrySubject="@entry.Subject" OnClicked="@OnCommentCreate"/>
+            <CreateEntryCommentComponent EntryId="id" EntrySubject="@entry.Subject" OnClicked="@OnCommentCreate" />
         </Authorized>
     </AuthorizeView>
 }
@@ -31,18 +31,30 @@
 
 
     [Parameter]
-    public Guid EntryId { get; set; }
+    public Guid id { get; set; }
 
     [Inject]
     IEntryService entryService { get; set; }
 
     private GetEntryDetailViewModel entry = new();
     private PagedViewModel<GetEntryCommentsViewModel> entryComments = new();
-    private int currentPage;
+    private int currentPage=1;
+
+    protected override async Task OnParametersSetAsync ()
+    {
+        entry = await entryService.GetEntryDetail(id);
+        await RefreshComment(1);
+        currentPage =  entryComments.PageInfo.CurrentPage;
+    }
 
     public async Task OnCommentCreate(CreateEntryCommentCommand command)
     {
         await entryService.CreateEntryComment(command);
+    }
+
+    private async Task RefreshComment(int PageNumber)
+    {
+        entryComments = await entryService.GetEntryComments(id, currentPage, 10);
     }
 
 }
