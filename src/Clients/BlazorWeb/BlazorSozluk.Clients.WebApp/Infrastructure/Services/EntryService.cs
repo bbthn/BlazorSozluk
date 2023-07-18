@@ -34,9 +34,9 @@ public class EntryService : IEntryService
         return result;
     }
 
-    public async Task<PagedViewModel<GetUserEntriesDetailViewModel>> GetUserEntries(string userName, int page, int pageSize)
+    public async Task<PagedViewModel<GetEntryDetailViewModel>> GetUserEntries(int page, int pageSize, string userName = null)
     {
-        var result = await httpClient.GetFromJsonAsync<PagedViewModel<GetUserEntriesDetailViewModel>>
+        var result = await httpClient.GetFromJsonAsync<PagedViewModel<GetEntryDetailViewModel>>
             ($"/api/entry/userentries?username={userName}&page={page}&pagesize={pageSize}");
 
         return result;
@@ -44,8 +44,7 @@ public class EntryService : IEntryService
     }
     public async Task<PagedViewModel<GetEntryCommentsViewModel>> GetEntryComments(Guid entryId, int page, int pageSize)
     {
-        var result = await httpClient.GetFromJsonAsync<PagedViewModel<GetEntryCommentsViewModel>>
-            ($"/api/entry/comments/{entryId}?&page={page}&pagesize={pageSize}");
+        var result = await httpClient.GetFromJsonAsync<PagedViewModel<GetEntryCommentsViewModel>>($"/api/entry/comments/{entryId}?page={page}&pagesize={pageSize}");
         return result;
     }
     public async Task<Guid> CreateEntry(CreateEntryCommand command)

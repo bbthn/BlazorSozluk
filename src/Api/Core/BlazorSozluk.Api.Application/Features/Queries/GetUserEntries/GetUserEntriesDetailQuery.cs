@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
 {
-    public class GetUserEntriesDetailQuery : BasePagedQuery, IRequest<PagedViewModel<GetUserEntriesDetailViewModel>>
+    public class GetUserEntriesDetailQuery : BasePagedQuery, IRequest<PagedViewModel<GetEntryDetailViewModel>>
     {
         public GetUserEntriesDetailQuery(Guid? userId, string userName=null, int page = 1, int pageSize = 10):base(page,pageSize)
         {

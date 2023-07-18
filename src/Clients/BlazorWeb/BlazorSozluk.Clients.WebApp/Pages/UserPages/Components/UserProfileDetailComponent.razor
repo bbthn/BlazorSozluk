@@ -1,0 +1,62 @@
+﻿
+
+@if(userDetail is not null)
+{    
+    <h1 class="text-white">@userDetail.UserName</h1>
+
+
+    @if (isMyProfile)
+    {
+        <input class="form-control btn-success btn-sozluk"  value="change details"
+        @onclick="(() => showForm = !showForm)"
+        />
+    }
+}
+
+
+
+
+@code {
+
+
+    [Parameter]
+    public Guid UserId { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    [Inject]
+    ILocalStorageService localStorageService { get; set; }
+
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    [Inject]
+    NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    IUserService userService { get; set; }
+
+    private UserDetailViewModel userDetail;
+
+    private bool showForm;
+    private bool isMyProfile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        if (!string.IsNullOrEmpty(UserName))
+        {
+            userDetail = await userService.GetUserDetail(UserName);
+        }
+        else
+        {
+            if (UserId == Guid.Empty && string.IsNullOrEmpty(UserName))
+            {
+                UserId = await authenticationStateProvider.GetUserId();
+            }
+            userDetail = await userService.GetUserDetail(UserId);
+        }
+    }
+
+}

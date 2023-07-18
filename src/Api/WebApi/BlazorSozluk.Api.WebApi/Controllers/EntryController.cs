@@ -28,10 +28,11 @@ public class EntryController : BaseController
         var entry = await mediator.Send(new GetEntryDetailQuery(id,UserId));
         return Ok(entry);
     }
-    [HttpGet("Comments/{id}")]
-    public async Task<IActionResult> GetEntryComments(Guid entryId, int page, int pageSize)
+    [HttpGet]
+    [Route("Comments/{id}")]
+    public async Task<IActionResult> GetEntryComments(Guid id, int page, int pageSize)
     {
-        var result = await mediator.Send(new GetEntryCommentsQuery(UserId, entryId, page, pageSize));
+        var result = await mediator.Send(new GetEntryCommentsQuery(UserId, id, page, pageSize));
         return Ok(result);
 
     }

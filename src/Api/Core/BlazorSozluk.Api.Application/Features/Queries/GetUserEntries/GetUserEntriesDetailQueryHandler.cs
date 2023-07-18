@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
 {
-    public class GetUserEntriesDetailQueryHandler : IRequestHandler<GetUserEntriesDetailQuery, PagedViewModel<GetUserEntriesDetailViewModel>>
+    public class GetUserEntriesDetailQueryHandler : IRequestHandler<GetUserEntriesDetailQuery, PagedViewModel<GetEntryDetailViewModel>>
     {
         private readonly IEntryRepository entryRepository;
 
@@ -21,7 +21,7 @@ namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
             this.entryRepository = entryRepository;
         }
 
-        public async Task<PagedViewModel<GetUserEntriesDetailViewModel>> Handle(GetUserEntriesDetailQuery request, CancellationToken cancellationToken)
+        public Task<PagedViewModel<GetEntryDetailViewModel>> Handle(GetUserEntriesDetailQuery request, CancellationToken cancellationToken)
         {
             var query = entryRepository.AsQueryable();
 
@@ -29,7 +29,7 @@ namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
             {
                 query = query.Where(i => i.CreatedById == request.UserId);
             }
-            else if(!string.IsNullOrEmpty(request.UserName))
+            else if (!string.IsNullOrEmpty(request.UserName))
             {
                 query = query.Where(i => i.CreatedBy.UserName == request.UserName);
             }
@@ -37,7 +37,7 @@ namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
             query = query.Include(i => i.EntryFavorites)
                           .Include(i => i.CreatedBy);
 
-            var list =  query.Select(i => new GetUserEntriesDetailViewModel()
+            var list = query.Select(i => new GetEntryDetailViewModel()
             {
                 Content = i.Content,
                 Subject = i.Subject,
@@ -50,7 +50,6 @@ namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
 
             var result = await list.GetPaged(request.Page, request.PageSize);
             return result;
-
         }
     }
 }

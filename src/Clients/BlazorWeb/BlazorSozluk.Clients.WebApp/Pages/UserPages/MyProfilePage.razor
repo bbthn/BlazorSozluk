@@ -1,0 +1,46 @@
+﻿@page "/me/{UserId:Guid}"
+@page "/me/{UserName}"
+@page "/me"
+
+
+@if(entries is not null)
+{
+    foreach (var entry in entries.Result)
+    {
+        <EntryViewerComponent Entry="@entry" MyEntries="true"   />
+        <br />
+    }
+
+    <PaginationComponent CurrentPage="@currentPage" 
+                         TotalPage="@entries.PageInfo.TotalPageCount"         
+                         OnPageChanged="PageChanged"
+        />
+}
+
+@code {
+
+    [Inject]
+    IEntryService entryService { get; set; }
+
+    [Parameter]
+    public Guid UserId { get; set; }
+    [Parameter]
+    public string UserName { get; set; }
+
+
+    PagedViewModel<GetEntryDetailViewModel> entries;
+
+    private int currentPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        entries = await entryService.GetUserEntries(currentPage, 20, UserName);
+    }
+
+    private async Task PageChanged(int currentPage)
+    {
+        this.currentPage = currentPage;
+        entries = await entryService.GetUserEntries(currentPage, 20, UserName);
+
+    }
+}
