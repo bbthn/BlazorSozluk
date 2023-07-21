@@ -1,3 +1,7 @@
+using BlazorSozluk.Common;
+using BlazorSozluk.Common.Events.Entry;
+using BlazorSozluk.Common.Infrastructure;
+
 namespace BlazorSozluk.Projections.FavoriteService
 {
     public class Worker : BackgroundService
@@ -11,11 +15,16 @@ namespace BlazorSozluk.Projections.FavoriteService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
+            QueueFactory.CreateBasicConsumer()
+                .EnsureExchange(SozlukConstants.FavExchangeName)
+                .EnsureQueue(SozlukConstants.CreateEntryFavQueueName,SozlukConstants.FavExchangeName)
+                .Receive<CreateEntryFavEvent>(fav =>
+                {
+                    _logger.LogInformation($"Received EntryId: {fav.EntryId}");
+
+                })
+                .StartConsuming(SozlukConstants.CreateEntryFavQueueName);
+            
         }
     }
 }

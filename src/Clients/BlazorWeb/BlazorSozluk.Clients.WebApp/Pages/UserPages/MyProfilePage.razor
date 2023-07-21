@@ -1,6 +1,10 @@
-﻿@page "/me/{UserId:Guid}"
-@page "/me/{UserName}"
+﻿@*@page "/profile/{id:Guid}"*@
+@page "/profile/{UserName}"
 @page "/me"
+
+
+<UserProfileDetailComponent UserId="@id" UserName="@UserName" />
+<br />
 
 
 @if(entries is not null)
@@ -23,7 +27,7 @@
     IEntryService entryService { get; set; }
 
     [Parameter]
-    public Guid UserId { get; set; }
+    public Guid id { get; set; }
     [Parameter]
     public string UserName { get; set; }
 

@@ -48,7 +48,7 @@ namespace BlazorSozluk.Api.Application.Features.Queries.GetUserEntries
                 IsFavorited = false
             });
 
-            var result = await list.GetPaged(request.Page, request.PageSize);
+            var result = list.GetPaged(request.Page, request.PageSize);
             return result;
         }
     }
