@@ -1,5 +1,6 @@
 using BlazorSozluk.Common;
 using BlazorSozluk.Common.Events.Entry;
+using BlazorSozluk.Common.Events.EntryComment;
 using BlazorSozluk.Common.Infrastructure;
 using BlazorSozluk.Projections.FavoriteService;
 
@@ -32,7 +33,35 @@ namespace BlazorSozluk.Projections.FavoriteService
 
                 })
                 .StartConsuming(SozlukConstants.CreateEntryFavQueueName);
-            
+
+            QueueFactory.CreateBasicConsumer()
+                .EnsureExchange(SozlukConstants.FavExchangeName)
+                .EnsureQueue(SozlukConstants.DeleteEntryFavQueueName, SozlukConstants.FavExchangeName)
+                .Receive<DeleteEntryFavEvent>(fav =>
+                {
+                    favService.DeleteEntryFavEvent(fav).GetAwaiter().GetResult();
+                    _logger.LogInformation($"Deleted Receive EntryId : {fav.EntryId}");
+                }).StartConsuming(SozlukConstants.DeleteEntryFavQueueName);
+
+            QueueFactory.CreateBasicConsumer()
+              .EnsureExchange(SozlukConstants.FavExchangeName)
+              .EnsureQueue(SozlukConstants.CreateEntryFavQueueName, SozlukConstants.FavExchangeName)
+              .Receive<CreateEntryCommentFavEvent>(fav =>
+              {
+                  favService.CreateEntryCommentFav(fav).GetAwaiter().GetResult();
+                  _logger.LogInformation($"Created Received  EntryCommentId: {fav.EntryCommentId}");
+
+              })
+              .StartConsuming(SozlukConstants.CreateEntryCommentFavQueueName);
+
+            QueueFactory.CreateBasicConsumer()
+                .EnsureExchange(SozlukConstants.FavExchangeName)
+                .EnsureQueue(SozlukConstants.DeleteEntryFavQueueName, SozlukConstants.FavExchangeName)
+                .Receive<DeleteEntryCommentFavEvent>(fav =>
+                {
+                    favService.DeleteEntryCommentFav(fav).GetAwaiter().GetResult();
+                    _logger.LogInformation($"Deleted Receive EntryCommentId : {fav.EntryCommentId}");
+                }).StartConsuming(SozlukConstants.DeleteEntryCommentFavQueueName);
         }
     }
 }

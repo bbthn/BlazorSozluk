@@ -21,7 +21,7 @@
                                       OnFavClicked="@OnFavClicked"
                                       FavoritedCount="@Entry.FavoritedCount"
                                               isFavorited="@Entry.IsFavorited"
-                                      OnVoteClicked="@OnVoteClicked" />
+                                      OnVoteClicked="@OnVoteClicked" Vote="@Entry.VoteType" />
         }
 
         <EntryFooterAuthorComponent CreatedDate="@Entry.CreatedDate"
@@ -79,7 +79,7 @@
             return;
 
         }
-        if (arg.DownVoteDeleted)
+        if (arg.IsDownVoteClicked)
         {
             await voteService.CreateEntryDownVote(Entry.Id);
             Entry.VoteType = VoteType.DownVote;

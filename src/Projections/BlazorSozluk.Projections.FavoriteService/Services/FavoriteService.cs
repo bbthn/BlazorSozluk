@@ -1,4 +1,5 @@
 ﻿using BlazorSozluk.Common.Events.Entry;
+using BlazorSozluk.Common.Events.EntryComment;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using System;
@@ -31,5 +32,42 @@ public class FavoriteService
                 CreatedById = @event.CreatedBy,
             });
 
+    }
+
+    public async Task DeleteEntryFavEvent(DeleteEntryFavEvent @event)
+    {
+        using var connection = new SqlConnection(connectionStr);
+
+        await connection.ExecuteAsync
+            ("DELETE FROM EntryFavorite WHERE ID=@EntryId",
+            new
+            {
+                EntryId = @event.EntryId
+            });
+    }
+    public async Task CreateEntryCommentFav(CreateEntryCommentFavEvent @event)
+    {
+        using var connection = new SqlConnection(connectionStr);
+
+        await connection.ExecuteAsync(
+            "INSERT INTO ENTRYCOMMENTFAV (Id, ENTRYCOMMENTID, CREATEDBYID, CREATEDATE) VALUES(@Id,@EntryCommentId,@CreatedById,GETDATE())",
+            new
+            {
+                Id=Guid.NewGuid(),
+                EntryCommentId=@event.EntryCommentId,
+                CreatedById=@event.CreatedBy,
+            });
+    }
+    public async Task DeleteEntryCommentFav(DeleteEntryCommentFavEvent @event)
+    {
+        using var connection = new SqlConnection(connectionStr);
+
+        await connection.ExecuteAsync(
+            "DELETE FROM ENTRYCOMMENTFAV WHERE ID=@EntryCommentId AND CREATEDBYID=@CreatedByID)",
+            new
+            {
+                EntryCommentId = @event.EntryCommentId,
+                CreatedByID=@event.CreatedBy,
+            });
     }
 }
