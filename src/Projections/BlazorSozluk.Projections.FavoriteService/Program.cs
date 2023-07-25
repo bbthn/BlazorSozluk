@@ -1,4 +1,5 @@
 using BlazorSozluk.Projections.FavoriteService;
+using BlazorSozluk.Projections.FavoriteService.Services;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>

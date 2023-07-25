@@ -17,21 +17,20 @@ public class UserServices
         this.configuration = configuration;
     }
 
-    public async Task EmailChangedEvent(UserEmailChangedEvent @event)
+    public async Task<Guid> CreateEmailConfirmation(UserEmailChangedEvent @event)
     {
+
+        var guid = Guid.NewGuid();
         using var connection = new SqlConnection(configuration.GetConnectionString("SqlServer"));
 
-        connection.ExecuteAsync
-            ("INSERT INTO emailconfirmation (Id, OldEmailAddress,NewEmailAddress,CreateDate) VALUES(@Id,@OldEmailAddress,@NewEmailAddress,GETDATE()",
-            new
-            {
-                Id= Guid.NewGuid(),
-                OldEmailAddress = @event.OldEmailAddress,
-                NewEmailAddress= @event.NewEmailAddress,
-            });
-
-
-
+        await connection.ExecuteAsync("INSERT INTO emailconfirmation (Id, NewEmailAddress, OldEmailAddress, CreateDate) VALUES (@Id,@NewEmailAddress,@OldEmailAddress,GETDATE())",
+              new
+              {
+                  Id = guid,
+                  OldEmailAddress = @event.OldEmailAddress,
+                  NewEmailAddress = @event.NewEmailAddress
+              });
+        return guid;
 
     }
 

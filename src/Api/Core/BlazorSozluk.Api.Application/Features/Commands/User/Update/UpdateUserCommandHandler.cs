@@ -42,7 +42,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Guid>
         {
             var @event = new UserEmailChangedEvent()
             {
-                OldEmailAddress = null,
+                OldEmailAddress = dbEmailAddress,
                 NewEmailAddress = dbUser.EmailAddress
             };
 

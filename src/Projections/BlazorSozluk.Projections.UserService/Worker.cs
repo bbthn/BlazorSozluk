@@ -9,24 +9,35 @@ namespace BlazorSozluk.Projections.UserService
     {
         private readonly ILogger<Worker> _logger;
         private readonly IConfiguration configuration;
+        private readonly UserService.Services.EmailService emailService;
+        private readonly UserService.Services.UserServices userService;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, EmailService emailService, UserServices userService)
         {
             _logger = logger;
             this.configuration = configuration;
+            this.emailService = emailService;
+            this.userService = userService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var userService = new UserServices(configuration);
 
             QueueFactory.CreateBasicConsumer()
                 .EnsureExchange(SozlukConstants.UserExchangeName)
                 .EnsureQueue(SozlukConstants.UserEmailChangedQueueName, SozlukConstants.UserExchangeName)
-                .Receive<UserEmailChangedEvent>(user =>
+                .Receive<UserEmailChangedEvent>(async user =>
                 {
-                    userService.EmailChangedEvent(user).GetAwaiter().GetResult();
+                    //DB INSERT 
+                    var confirmationId =  await userService.CreateEmailConfirmation(user);
+
+                    // Generate confirmation Link 
+                    var link= emailService.GenerateConfirmationLink(confirmationId);
+
                     _logger.LogInformation($"Received old email:{user.OldEmailAddress}, new email:{user.NewEmailAddress}");
+
+                    emailService.SendEmail(link).GetAwaiter().GetResult();
+
                 }).StartConsuming(SozlukConstants.UserEmailChangedQueueName);
         }
     }
